@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actech Academy - Assignment Generator Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brandRed: '#A31621',
+                        brandDark: '#1a1a1a',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .assignment-paper {
+            width: 210mm;
+            height: 297mm;
+            background: white;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        @media print {
+            @page { size: A4; margin: 0; }
+            .no-print { display: none !important; }
+            body { background: white; padding: 0; margin: 0; }
+            .assignment-paper {
+                box-shadow: none !important;
+                border: none !important;
+                margin: 0 !important;
+                width: 210mm;
+                height: 297mm;
+                padding: 15mm !important;
+            }
+        }
+
+        .content-area { white-space: pre-wrap; word-wrap: break-word; }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans text-gray-900">
+
+    <!-- Navbar -->
+    <nav class="no-print bg-white py-4 px-6 flex justify-between items-center border-b sticky top-0 z-50">
+        <div class="flex items-center gap-6">
+            <a href="dashboard.html" class="flex items-center gap-2 text-gray-500 hover:text-brandRed transition-colors font-bold text-xs uppercase tracking-widest">
+                <i class="fas fa-th-large"></i>
+                Dashboard
+            </a>
+            <div class="h-6 w-px bg-gray-200"></div>
+            <div class="text-xl font-black text-brandRed uppercase italic leading-none">Actech <span class="text-brandDark">Academy</span></div>
+        </div>
+        <button onclick="window.print()" class="bg-brandDark text-white px-8 py-2 rounded-lg text-xs font-bold uppercase hover:bg-brandRed transition-all shadow-lg active:scale-95">
+            <i class="fas fa-file-pdf mr-2"></i> Save Assignment
+        </button>
+    </nav>
+
+    <main class="py-10 px-4">
+        
+        <!-- Editor Form -->
+        <section class="no-print bg-white p-8 rounded-2xl shadow-sm mb-10 max-w-5xl mx-auto border-t-4 border-brandRed">
+            <div class="grid md:grid-cols-4 gap-6 mb-6">
+                <div class="md:col-span-2">
+                    <label class="text-[10px] font-bold text-gray-400 uppercase">Assignment Title</label>
+                    <input type="text" id="inTitle" placeholder="e.g. JavaScript Logic Basics" class="w-full p-2 bg-gray-50 border rounded text-sm focus:border-brandRed outline-none" oninput="updateSheet()">
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold text-gray-400 uppercase">Module</label>
+                    <input type="text" id="inModule" placeholder="Web Dev" class="w-full p-2 bg-gray-50 border rounded text-sm focus:border-brandRed outline-none" oninput="updateSheet()">
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold text-gray-400 uppercase">Due Date</label>
+                    <input type="text" id="inDue" placeholder="May 15, 2026" class="w-full p-2 bg-gray-50 border rounded text-sm focus:border-brandRed outline-none" oninput="updateSheet()">
+                </div>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-6 mb-6">
+                <div>
+                    <label class="text-[10px] font-bold text-gray-400 uppercase">Learning Objectives</label>
+                    <textarea id="inObjectives" rows="3" class="w-full p-2 bg-gray-50 border rounded text-sm focus:border-brandRed outline-none" oninput="updateSheet()" placeholder="Key learning outcomes..."></textarea>
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold text-gray-400 uppercase">Task Instructions</label>
+                    <textarea id="inTasks" rows="3" class="w-full p-2 bg-gray-50 border rounded text-sm focus:border-brandRed outline-none" oninput="updateSheet()" placeholder="What should they do?"></textarea>
+                </div>
+            </div>
+
+            <div>
+                <label class="text-[10px] font-bold text-gray-400 uppercase italic">Resource Link (GitHub/Documentation)</label>
+                <div class="flex gap-2">
+                    <div class="bg-gray-200 p-2 rounded-l border border-r-0 text-gray-500 text-sm flex items-center"><i class="fas fa-link"></i></div>
+                    <input type="text" id="inLink" placeholder="https://github.com/actech..." class="w-full p-2 bg-gray-50 border rounded-r text-sm focus:border-brandRed outline-none" oninput="updateSheet()">
+                </div>
+            </div>
+        </section>
+
+        <!-- A4 Page Preview -->
+        <div class="assignment-paper p-16 relative">
+            <!-- Decorative Accent -->
+            <div class="absolute top-0 right-0 w-32 h-32 bg-gray-50 rounded-bl-full -z-10"></div>
+            
+            <!-- Header Section -->
+            <div class="flex justify-between items-start mb-10">
+                <div>
+                    <div class="text-3xl font-black text-brandRed uppercase italic leading-none mb-1">Actech <span class="text-brandDark">Academy</span></div>
+                    <div class="flex items-center gap-2">
+                        <span class="h-1 w-8 bg-brandRed"></span>
+                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.3em]">Curriculum Design</p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <p class="text-[9px] font-black text-brandDark uppercase bg-gray-100 px-3 py-1 inline-block">Official Coursework</p>
+                    <p class="text-[10px] font-bold text-gray-400 mt-2 italic" id="outCurrentDate"></p>
+                </div>
+            </div>
+
+            <!-- Title & Metadata Block -->
+            <div class="mb-10 p-8 border-2 border-brandDark relative">
+                <div class="absolute -top-3 left-6 bg-white px-3 text-[10px] font-black text-brandRed uppercase tracking-widest">Project Brief</div>
+                <h1 id="outTitle" class="text-4xl font-black text-brandDark uppercase mb-4 tracking-tighter leading-none">Assignment Title</h1>
+                <div class="flex justify-between items-center border-t border-gray-100 pt-4">
+                    <div class="flex gap-8">
+                        <div>
+                            <p class="text-[8px] font-bold text-gray-400 uppercase mb-1">Module</p>
+                            <p id="outModule" class="text-xs font-black text-brandDark uppercase">---</p>
+                        </div>
+                        <div>
+                            <p class="text-[8px] font-bold text-gray-400 uppercase mb-1">Deadline</p>
+                            <p id="outDue" class="text-xs font-black text-brandRed uppercase">---</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content Grid -->
+            <div class="grid grid-cols-12 gap-8 flex-grow">
+                <!-- Left Column: Tasks -->
+                <div class="col-span-8">
+                    <h3 class="text-xs font-black text-brandDark uppercase mb-4 flex items-center gap-3">
+                        <span class="bg-brandDark text-white w-5 h-5 flex items-center justify-center text-[10px]">01</span>
+                        Instructions & Requirements
+                    </h3>
+                    <div id="outTasks" class="content-area text-sm leading-relaxed text-gray-700 pr-4">
+                        Instructions will appear here...
+                    </div>
+                </div>
+
+                <!-- Right Column: Objectives & Resources -->
+                <div class="col-span-4 space-y-8">
+                    <div>
+                        <h3 class="text-[10px] font-black text-brandRed uppercase mb-3 tracking-widest">Key Goals</h3>
+                        <div id="outObjectives" class="content-area text-[11px] leading-relaxed text-gray-500 italic border-l-2 border-gray-200 pl-4">
+                            Objectives...
+                        </div>
+                    </div>
+
+                    <div class="bg-brandDark p-5 text-white">
+                        <h3 class="text-[10px] font-black uppercase mb-3 text-brandRed tracking-widest">Digital Resource</h3>
+                        <p class="text-[9px] text-gray-400 mb-3 uppercase font-bold leading-tight">Access base code or documentation via:</p>
+                        <a href="#" id="outLink" class="text-[10px] font-bold text-white underline break-all hover:text-brandRed transition-colors">
+                            No link provided
+                        </a>
+                        <div class="mt-4 pt-4 border-t border-gray-700 flex items-center gap-2">
+                            <i class="fas fa-qrcode text-brandRed"></i>
+                            <span class="text-[8px] uppercase text-gray-500 font-bold">Internal Scan Enabled</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="mt-auto pt-8 border-t border-gray-100 flex justify-between items-center">
+                <div class="flex items-center gap-4">
+                    <img src="images/Actech Academy Official Logo.jpg" alt="Logo" class="h-8 grayscale opacity-50">
+                    <div class="text-[8px] text-gray-400 font-bold uppercase leading-tight">
+                        Actech Academy HQ<br>
+                        West Africa | Tech Support
+                    </div>
+                </div>
+                <div class="text-right text-[8px] text-gray-300 font-bold uppercase tracking-[0.4em]">
+                    Build • Scale • Deploy
+                </div>
+            </div>
+        </div>
+    </main>
+
+<script>
+    function updateSheet() {
+        document.getElementById('outTitle').innerText = document.getElementById('inTitle').value || "ASSIGNMENT TITLE";
+        document.getElementById('outModule').innerText = document.getElementById('inModule').value || "UNSPECIFIED";
+        document.getElementById('outDue').innerText = document.getElementById('inDue').value || "TBD";
+        
+        const objText = document.getElementById('inObjectives').value;
+        document.getElementById('outObjectives').innerText = objText || "No specific objectives defined.";
+
+        const taskText = document.getElementById('inTasks').value;
+        document.getElementById('outTasks').innerText = taskText || "Waiting for task details...";
+
+        const linkVal = document.getElementById('inLink').value;
+        const linkDisplay = document.getElementById('outLink');
+        if (linkVal) {
+            linkDisplay.innerText = linkVal;
+            linkDisplay.href = linkVal;
+        } else {
+            linkDisplay.innerText = "No link provided";
+            linkDisplay.href = "#";
+        }
+    }
+
+    // Auto-Date
+    document.getElementById('outCurrentDate').innerText = new Date().toLocaleDateString('en-GB', {
+        day: 'numeric', month: 'short', year: 'numeric'
+    });
+
+    // Initial load
+    updateSheet();
+</script>
+</body>
+</html>

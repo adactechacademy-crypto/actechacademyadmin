@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actech Academy - Official Letterhead</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brandRed: '#A31621',
+                        brandDark: '#1a1a1a',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Force A4 Aspect Ratio for Preview */
+        .letter-paper {
+            width: 210mm;
+            height: 297mm;
+            background: white;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; /* Strict one-page limit */
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        @media print {
+            @page {
+                size: A4;
+                margin: 0;
+            }
+            .no-print { display: none !important; }
+            body { background: white; padding: 0; margin: 0; }
+            .letter-paper {
+                box-shadow: none !important;
+                border: none !important;
+                margin: 0 !important;
+                width: 210mm;
+                height: 297mm;
+                padding: 15mm !important; /* Standard print margins */
+            }
+        }
+
+        #outContent {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans text-gray-900">
+
+    <!-- Navbar -->
+    <nav class="no-print bg-white py-4 px-6 flex justify-between items-center border-b sticky top-0 z-50">
+        <div class="flex items-center gap-6">
+            <!-- Back Button -->
+            <a href="dashboard.html" class="flex items-center gap-2 text-gray-500 hover:text-brandRed transition-colors font-bold text-xs uppercase tracking-widest">
+                <i class="fas fa-th-large"></i>
+                Dashboard
+            </a>
+            <div class="h-6 w-px bg-gray-200"></div>
+            <div class="text-xl font-black text-brandRed uppercase italic">Actech <span class="text-brandDark">Academy</span></div>
+        </div>
+        <button onclick="window.print()" class="bg-brandDark text-white px-8 py-2 rounded-lg text-xs font-bold uppercase hover:bg-brandRed transition-all shadow-lg active:scale-95">
+            <i class="fas fa-print mr-2"></i> Print Letter (1 Page)
+        </button>
+    </nav>
+
+    <main class="py-10 px-4">
+        
+        <!-- Input Form -->
+        <section class="no-print bg-white p-6 rounded-2xl shadow-sm mb-10 max-w-4xl mx-auto border-t-4 border-brandRed">
+            <div class="grid md:grid-cols-3 gap-4 mb-4">
+                <div>
+                    <label class="text-[10px] font-bold text-gray-400 uppercase">Recipient</label>
+                    <input type="text" id="letRecipient" placeholder="Recipient Name" class="w-full p-2 bg-gray-50 border rounded text-sm focus:border-brandRed outline-none" oninput="updateLetter()">
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold text-gray-400 uppercase">Signatory</label>
+                    <input type="text" id="letFrom" placeholder="Your Name" class="w-full p-2 bg-gray-50 border rounded text-sm focus:border-brandRed outline-none" oninput="updateLetter()">
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold text-gray-400 uppercase">Subject</label>
+                    <input type="text" id="letSubject" placeholder="Letter Subject" class="w-full p-2 bg-gray-50 border rounded text-sm focus:border-brandRed outline-none" oninput="updateLetter()">
+                </div>
+            </div>
+            <label class="text-[10px] font-bold text-gray-400 uppercase">Message Body</label>
+            <textarea id="letContent" rows="5" class="w-full p-3 bg-gray-50 border rounded text-sm focus:border-brandRed outline-none" oninput="updateLetter()" placeholder="Type your letter content..."></textarea>
+        </section>
+
+        <!-- A4 Page Preview -->
+        <div class="letter-paper p-16 relative border-t-[12px] border-brandRed">
+            
+            <!-- Header -->
+            <div class="flex justify-between items-start mb-10">
+                <div>
+                    <img src="images/Actech Academy Official Logo.jpg" alt="Logo" class="h-16 w-auto mb-2">
+                    <div class="text-xl font-black text-brandRed uppercase italic leading-none">Actech <span class="text-brandDark">Academy</span></div>
+                    <p class="text-[8px] font-bold text-gray-400 uppercase tracking-[0.2em]">Excellence in Digital Literacy</p>
+                </div>
+                <div class="text-right text-[10px] leading-tight text-gray-600">
+                    <p class="text-brandRed font-black uppercase mb-1">Office of the Registry</p>
+                    <p>The Gambia, West Africa</p>
+                    <p>+220 335 6964</p>
+                    <p>info@actechacademy.com</p>
+                    <p class="mt-3 font-bold text-brandDark" id="outDate"></p>
+                </div>
+            </div>
+
+            <!-- Recipient & Subject -->
+            <div class="mb-8">
+                <p class="text-[10px] font-bold text-gray-400 uppercase mb-1">To:</p>
+                <p id="outRecipient" class="text-sm font-black text-brandDark uppercase tracking-tight">---</p>
+                
+                <div class="mt-6 border-l-4 border-brandRed pl-4 py-1 bg-gray-50">
+                    <p id="outSubject" class="text-sm font-black uppercase text-brandDark underline decoration-brandRed underline-offset-4">---</p>
+                </div>
+            </div>
+
+            <!-- Body -->
+            <div id="outContent" class="text-[13px] leading-relaxed text-gray-800 flex-grow mb-8">
+                Dear Student,
+                <br><br>
+                Enter your text in the editor above. This layout is locked to exactly one A4 page. 
+            </div>
+
+            <!-- Sign-off -->
+            <div class="mt-auto">
+                <p class="text-sm font-medium text-gray-600 mb-10">Sincerely,</p>
+                
+                <div class="relative w-fit">
+                    <div class="border-t border-brandDark min-w-[200px] pt-2">
+                        <p id="outFrom" class="text-sm font-black uppercase text-brandDark">---</p>
+                        <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Actech Academy Management</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="mt-10 border-t border-gray-100 pt-4 flex justify-between items-center text-[8px] text-gray-400 font-bold uppercase">
+                <div>Verification Code: <span class="text-gray-300">ACT-2026-OFFICIAL</span></div>
+                <div class="text-brandRed italic">Building the future of tech</div>
+            </div>
+        </div>
+    </main>
+
+<script>
+    function updateLetter() {
+        document.getElementById('outRecipient').innerText = document.getElementById('letRecipient').value || "RECIPIENT NAME";
+        document.getElementById('outFrom').innerText = document.getElementById('letFrom').value || "AUTHORIZED SIGNATORY";
+        document.getElementById('outSubject').innerText = document.getElementById('letSubject').value || "RE: OFFICIAL ACADEMIC NOTIFICATION";
+        
+        const content = document.getElementById('letContent').value;
+        if (content.trim()) {
+            document.getElementById('outContent').innerText = content;
+        } else {
+            document.getElementById('outContent').innerHTML = "Dear Student,<br><br>Welcome to Actech Academy. Please update the text in the editor above to generate your official document.";
+        }
+    }
+
+    // Auto-Date
+    document.getElementById('outDate').innerText = new Date().toLocaleDateString('en-GB', {
+        day: 'numeric', month: 'long', year: 'numeric'
+    });
+
+    // Initialize
+    updateLetter();
+</script>
+</body>
+</html>

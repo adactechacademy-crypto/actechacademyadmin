@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actech Academy - Exam Result System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brandRed: '#A31621',
+                        brandDark: '#1a1a1a',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @media print {
+            @page { size: portrait; margin: 5mm; }
+            .no-print { display: none !important; }
+            body { background-color: white !important; padding: 0 !important; }
+            .print-container { 
+                box-shadow: none !important; 
+                border: none !important; 
+                margin: 0 auto !important; 
+                width: 100% !important; 
+                padding: 20px !important; 
+                min-height: auto !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans text-gray-900">
+
+    <!-- Navigation -->
+    <nav class="no-print bg-white py-4 px-8 flex justify-between items-center border-b border-gray-100 sticky top-0 z-50 w-full shadow-sm">
+        <div class="flex items-center gap-6">
+            <a href="dashboard.html" class="flex items-center gap-2 text-gray-500 hover:text-brandRed transition-colors font-bold text-xs uppercase tracking-widest">
+                <i class="fas fa-arrow-left"></i>
+                Back to Home
+            </a>
+            <div class="h-6 w-px bg-gray-200"></div>
+            <div class="text-xl font-black text-brandRed tracking-tight uppercase">
+                Actech <span class="text-brandDark">Academy</span>
+            </div>
+        </div>
+        
+        <button onclick="window.print()" class="bg-brandDark text-white px-6 py-2 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-brandRed transition-all shadow-md active:scale-95">
+            <i class="fas fa-print mr-2"></i> Print Official Result
+        </button>
+    </nav>
+
+    <main class="max-w-full mx-auto py-6 px-6 grid md:grid-cols-4 gap-8">
+        
+        <!-- Input Sidebar -->
+        <section class="no-print md:col-span-1 bg-white p-6 rounded-2xl shadow-sm border border-gray-200 h-fit space-y-6 sticky top-24">
+            <h2 class="text-lg font-black uppercase border-b-2 border-brandRed pb-2">Result Entry</h2>
+            
+            <div class="space-y-4">
+                <input type="text" id="resName" placeholder="Student Full Name" class="w-full p-3 bg-gray-50 border rounded-xl text-sm outline-none focus:border-brandRed" oninput="updateResults()">
+                <input type="text" id="resID" placeholder="Student ID" class="w-full p-3 bg-gray-50 border rounded-xl text-sm outline-none focus:border-brandRed" oninput="updateResults()">
+                <select id="resCourse" class="w-full p-3 bg-gray-50 border rounded-xl text-sm outline-none focus:border-brandRed font-bold" onchange="updateResults()">
+                    <option value="">Select Course...</option>
+                    <option value="Virtual Assistance">Virtual Assistance</option>
+                    <option value="Graphic Design">Graphic Design</option>
+                    <option value="Basic Computer Knowledge">Basic Computer Knowledge</option>
+                    <option value="Web Development">Web Development</option>
+                    <option value="Personal Assistant">Personal Assistant</option>
+                    <option value="Digital Marketing Fundamentals">Digital Marketing Fundamentals</option>
+                </select>
+            </div>
+
+            <h2 class="text-md font-black uppercase pt-4 border-t border-gray-100">Score Sheet</h2>
+            <div class="grid grid-cols-2 gap-3">
+                <div class="col-span-2">
+                    <label class="text-[10px] font-bold text-gray-400 uppercase">Assignment (20)</label>
+                    <input type="number" id="scoreAss" max="20" placeholder="0" class="w-full p-2 border rounded-lg text-sm outline-none" oninput="updateResults()">
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold text-gray-400 uppercase">Objective (20)</label>
+                    <input type="number" id="scoreObj" max="20" placeholder="0" class="w-full p-2 border rounded-lg text-sm outline-none" oninput="updateResults()">
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold text-gray-400 uppercase">Theory (20)</label>
+                    <input type="number" id="scoreTheo" max="20" placeholder="0" class="w-full p-2 border rounded-lg text-sm outline-none" oninput="updateResults()">
+                </div>
+                <div class="col-span-2">
+                    <label class="text-[10px] font-bold text-gray-400 uppercase">Practical (40)</label>
+                    <input type="number" id="scorePrac" max="40" placeholder="0" class="w-full p-2 border rounded-lg text-sm outline-none" oninput="updateResults()">
+                </div>
+            </div>
+
+            <textarea id="resRemarks" rows="2" placeholder="Examiner comments..." class="w-full p-3 bg-gray-50 border rounded-xl text-sm outline-none focus:border-brandRed" oninput="updateResults()"></textarea>
+        </section>
+
+        <!-- Results Preview -->
+        <section class="md:col-span-3 flex justify-center">
+            <div id="results-card" class="print-container bg-white shadow-2xl rounded-sm border-t-[10px] border-brandDark p-10 w-full max-w-[800px] relative flex flex-col min-h-[1000px]">
+                
+                <div class="flex justify-center mb-4">
+                    <img src="images/Actech Academy Official Logo.jpg" alt="Actech Academy Logo" class="h-28 w-auto object-contain">
+                </div>
+
+                <div class="text-center mb-6">
+                    <div class="text-3xl font-black text-brandRed tracking-tighter uppercase italic">Actech <span class="text-brandDark">Academy</span></div>
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.3em] mt-1">Official Statement of Results</p>
+                </div>
+
+                <div class="grid grid-cols-3 border-y border-gray-900 py-4 mb-6">
+                    <div class="border-r border-gray-100 px-4">
+                        <p class="text-[8px] font-black text-brandRed uppercase mb-1">Student</p>
+                        <p id="outResName" class="text-xs font-bold uppercase">---</p>
+                    </div>
+                    <div class="text-center border-r border-gray-100 px-4">
+                        <p class="text-[8px] font-black text-brandRed uppercase mb-1">ID Number</p>
+                        <p id="outResID" class="text-xs font-bold">---</p>
+                    </div>
+                    <div class="text-right px-4">
+                        <p class="text-[8px] font-black text-brandRed uppercase mb-1">Date Issued</p>
+                        <p id="outResDate" class="text-xs font-bold text-gray-600">---</p>
+                    </div>
+                </div>
+
+                <div class="mb-6 text-center">
+                    <h3 id="outResCourse" class="text-2xl font-black uppercase tracking-tight text-brandDark inline-block border-b-4 border-brandRed pb-1">---</h3>
+                </div>
+
+                <table class="w-full mb-8">
+                    <thead>
+                        <tr class="bg-brandDark text-white uppercase text-[9px] tracking-widest">
+                            <th class="py-4 px-6 text-left">Assessment Component</th>
+                            <th class="py-4 px-6 text-center">Max</th>
+                            <th class="py-4 px-6 text-right">Score</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-xs font-bold text-gray-800 divide-y divide-gray-100 border-x border-b border-gray-100">
+                        <tr>
+                            <td class="py-4 px-6 uppercase text-gray-500 italic">Assignment</td>
+                            <td class="py-4 px-6 text-center">20</td>
+                            <td id="outAss" class="py-4 px-6 text-right font-black text-base">0</td>
+                        </tr>
+                        <tr>
+                            <td class="py-4 px-6 uppercase text-gray-500 italic">Objectives</td>
+                            <td class="py-4 px-6 text-center">20</td>
+                            <td id="outObj" class="py-4 px-6 text-right font-black text-base">0</td>
+                        </tr>
+                        <tr>
+                            <td class="py-4 px-6 uppercase text-gray-500 italic">Theory</td>
+                            <td class="py-4 px-6 text-center">20</td>
+                            <td id="outTheo" class="py-4 px-6 text-right font-black text-base">0</td>
+                        </tr>
+                        <tr class="bg-gray-50">
+                            <td class="py-4 px-6 uppercase text-gray-500 italic">Practical Project</td>
+                            <td class="py-4 px-6 text-center">40</td>
+                            <td id="outPrac" class="py-4 px-6 text-right font-black text-base text-brandRed">0</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="grid grid-cols-3 gap-4 mb-8">
+                    <div class="bg-gray-50 p-4 rounded-xl text-center border border-gray-100">
+                        <p class="text-[9px] font-black text-brandRed uppercase">Aggregate</p>
+                        <p id="outTotal" class="text-3xl font-black text-brandDark">0</p>
+                    </div>
+                    <div class="bg-brandDark p-4 rounded-xl text-center shadow-lg">
+                        <p class="text-[9px] font-black text-white/50 uppercase">Grade</p>
+                        <p id="outGrade" class="text-3xl font-black text-white">-</p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-xl text-center border border-gray-100">
+                        <p class="text-[9px] font-black text-brandRed uppercase">Status</p>
+                        <p id="outStatus" class="text-[11px] font-black text-brandDark uppercase mt-1 leading-tight">---</p>
+                    </div>
+                </div>
+
+                <div class="mb-10">
+                    <h4 class="text-[9px] font-black text-brandRed uppercase mb-2 tracking-widest">Examiner Remarks:</h4>
+                    <div class="min-h-[60px] p-4 border border-gray-100 rounded-xl italic text-gray-600 text-xs bg-gray-50/30">
+                        <p id="outRemarks">No remarks provided.</p>
+                    </div>
+                </div>
+
+                <div class="mt-auto pt-6 border-t border-gray-100 flex justify-between items-end">
+                    <div class="text-[8px] text-gray-400 font-bold uppercase leading-relaxed">
+                        Actech Academy Verification Unit<br>
+                        Electronic Academic Record &copy; 2026
+                    </div>
+                    <div class="text-center">
+                        <div class="w-32 border-b border-brandDark mb-1"></div>
+                        <p class="text-[9px] font-black uppercase">Registrar Signature</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+<script>
+    function getGrade(score) {
+        if (score >= 80) return "A1";
+        if (score >= 70) return "B2";
+        if (score >= 65) return "B3";
+        if (score >= 60) return "C4";
+        if (score >= 55) return "C5";
+        if (score >= 50) return "C6";
+        if (score >= 45) return "D7";
+        if (score >= 40) return "E8";
+        return "F9";
+    }
+
+    function updateResults() {
+        document.getElementById('outResName').innerText = document.getElementById('resName').value || "---";
+        document.getElementById('outResID').innerText = document.getElementById('resID').value || "---";
+        document.getElementById('outResCourse').innerText = document.getElementById('resCourse').value || "---";
+        document.getElementById('outRemarks').innerText = document.getElementById('resRemarks').value || "No additional remarks provided.";
+        
+        const ass = parseFloat(document.getElementById('scoreAss').value) || 0;
+        const obj = parseFloat(document.getElementById('scoreObj').value) || 0;
+        const theo = parseFloat(document.getElementById('scoreTheo').value) || 0;
+        const prac = parseFloat(document.getElementById('scorePrac').value) || 0;
+        
+        const total = ass + obj + theo + prac;
+
+        document.getElementById('outAss').innerText = ass;
+        document.getElementById('outObj').innerText = obj;
+        document.getElementById('outTheo').innerText = theo;
+        document.getElementById('outPrac').innerText = prac;
+        document.getElementById('outTotal').innerText = total;
+
+        if (total > 0 || ass > 0) {
+            const grade = getGrade(total);
+            document.getElementById('outGrade').innerText = grade;
+            
+            let statusText = (total >= 50) ? "CERTIFIED" : "NOT YET CERTIFIED";
+            if (total >= 80) statusText = "CERTIFIED (DISTINCTION)";
+            
+            document.getElementById('outStatus').innerText = statusText;
+            document.getElementById('outStatus').className = "text-[11px] font-black mt-1 " + (total >= 50 ? "text-green-600" : "text-brandRed");
+        } else {
+            document.getElementById('outGrade').innerText = "-";
+            document.getElementById('outStatus').innerText = "---";
+        }
+    }
+
+    document.getElementById('outResDate').innerText = new Date().toLocaleDateString('en-GB', {
+        day: 'numeric', month: 'long', year: 'numeric'
+    });
+</script>
+</body>
+</html>

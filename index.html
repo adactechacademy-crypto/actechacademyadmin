@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actech Academy - Admin Access</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up { animation: fadeInUp 0.5s ease-out forwards; }
+        
+        .bg-pattern {
+            background-color: #1a1a1a;
+            background-image: radial-gradient(#A31621 0.5px, transparent 0.5px);
+            background-size: 30px 30px;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brandRed: '#A31621',
+                        brandDark: '#1a1a1a',
+                    }
+                }
+            }
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const identifier = document.getElementById('adminID').value.trim();
+            const accessCode = document.getElementById('accessCode').value.trim();
+
+            // Logic: Check for a valid ID and the specific code 1801
+            if (identifier.length >= 3 && accessCode === "1801") {
+                sessionStorage.setItem('actech_logged_in', 'true');
+                sessionStorage.setItem('admin_user', identifier);
+                window.location.href = 'dashboard.html';
+            } else if (accessCode !== "1801") {
+                alert("Invalid Access Code. Please try again.");
+            } else {
+                alert("Please enter a valid Admin Identifier.");
+            }
+        }
+    </script>
+</head>
+<body class="bg-pattern h-screen flex items-center justify-center px-4">
+
+    <div class="bg-white max-w-sm w-full rounded-3xl shadow-2xl overflow-hidden animate-fade-in-up">
+        <!-- Header -->
+        <div class="bg-brandRed py-10 text-center text-white relative">
+            <div class="text-3xl font-black tracking-tighter uppercase italic">
+                Actech <span class="text-brandDark">Academy</span>
+            </div>
+            <p class="text-[10px] font-bold uppercase tracking-[0.3em] mt-2 opacity-90">Secure Admin Portal</p>
+        </div>
+        
+        <!-- Form -->
+        <form onsubmit="handleLogin(event)" class="p-8 space-y-5">
+            <div>
+                <label class="block text-[10px] font-black uppercase text-gray-400 mb-1 ml-1">Admin ID</label>
+                <input type="text" id="adminID" placeholder="Username or Email" required
+                       class="w-full p-4 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:border-brandRed focus:bg-white outline-none transition-all font-medium">
+            </div>
+
+            <div>
+                <label class="block text-[10px] font-black uppercase text-gray-400 mb-1 ml-1">Access Code</label>
+                <input type="password" id="accessCode" placeholder="••••" required
+                       class="w-full p-4 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:border-brandRed focus:bg-white outline-none transition-all font-bold tracking-widest text-center">
+            </div>
+            
+            <button type="submit" 
+                    class="w-full bg-brandDark text-white py-4 rounded-2xl font-black uppercase tracking-widest hover:bg-brandRed transition-all shadow-lg active:scale-95 mt-2">
+                Verify & Enter
+            </button>
+            
+            <div class="pt-4 border-t border-gray-100">
+                <p class="text-[9px] text-center text-gray-400 uppercase font-bold leading-relaxed">
+                    System Auth: 1801 Verification Required <br>
+                    <span class="text-brandRed">Restricted Access Only</span>
+                </p>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>
